@@ -24,22 +24,25 @@ rl.question(`\nWhich day wanna you solve ? \x1b[32m[${folders.length}]\x1b[0m `,
     day = folders.length;
   }
 
-  if (folders.every(f => f !== `Day ${day}`)) {
+  if (folders.every(f => f !== `Day ${day}`) && day !== 'all') {
     console.log(`Invalid day, stopping ...`);  
     exit();
   } else {
+    day = day === 'all' ? Array.from({length: folders.length}, (_, i) => i + 1) : [day];
     
-    import(`./Day ${day}/index.mjs`).then((dayScript) => {
-      let data = readFileSync(`./Day ${day}/data`).toString().replaceAll('\n', ',').split(',');
-
-      let solutions = dayScript.solve(data);
-
-      console.group("\x1b[1m\x1b[32m%s\x1b[0m", `Solutions of day ${day}`);
-      console.table(
-          [{ "Part One": solutions[0], "Part Two": solutions[1] }]
-      )
-      console.groupEnd();
-    });
+    day.forEach( day => {
+      import(`./Day ${day}/index.mjs`).then((dayScript) => {
+        let data = readFileSync(`./Day ${day}/data`).toString().replaceAll('\n', ',').split(',');
+  
+        let solutions = dayScript.solve(data);
+  
+        console.group("\x1b[1m\x1b[32m%s\x1b[0m", `Solutions of day ${day}`);
+        console.table(
+            [{ "Part One": solutions[0], "Part Two": solutions[1] }]
+        )
+        console.groupEnd("============================================================\n");
+      });
+    })
   }
 
   rl.close();
