@@ -12,14 +12,15 @@ const getDirectories = (source = '.') =>
 
 let folders = getDirectories();
 
-folders.forEach((d,i) => console.log(`${i+1} - ${d}`))
+folders.forEach((d,i) => console.log(`${(i+1)===folders.length ? '\x1b[32m' : '\x1b[33m'}${i+1 < 10 ? ` ${i+1} ` : `${i+1} `}${(i+1)===folders.length ? '' : '\x1b[0m'} - ${d}\x1b[0m`))
+console.log(`\x1b[33mall\x1b[0m - Run all solutions`)
 
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
   
-rl.question(`\nWhich day wanna you solve ? \x1b[32m[${folders.length}]\x1b[0m `, (day) => {
+rl.question(`\nWhich day's solution wanna you see ? \x1b[32m[${folders.length}]\x1b[0m `, (day) => {
   if (day === "") {
     day = folders.length;
   }
