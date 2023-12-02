@@ -33,7 +33,7 @@ rl.question(`\nWhich day's solution wanna you see ? \x1b[32m[${folders.length}]\
     
     day.forEach( day => {
       import(`./Day ${day}/index.mjs`).then((dayScript) => {
-        let data = readFileSync(`./Day ${day}/data`).toString().replaceAll('\n', ',').split(',');
+        let data = readFileSync(`./Day ${day}/data`).toString().split('\n');
   
         let solutions = dayScript.solve(data);
   
