@@ -8,21 +8,25 @@ console.log("List of available solutions :\n");
 const getDirectories = (source = '.') =>
   readdirSync(source, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory() && dirent.name.includes('Day'))
-    .map(dirent => dirent.name);
+    .map(dirent => dirent.name)
+    .sort((a, b) => parseInt(a.match(/\d+/g)[0])-b.match(/\d+/g)[0]);
 
 let folders = getDirectories();
 
-folders.forEach((d,i) => console.log(`${(i+1)===folders.length ? '\x1b[32m' : '\x1b[33m'}${i+1 < 10 ? ` ${i+1} ` : `${i+1} `}${(i+1)===folders.length ? '' : '\x1b[0m'} - ${d}\x1b[0m`))
-console.log(`\x1b[33mall\x1b[0m - Run all solutions`)
+let date = new Date();
+let isDuringAdvent = date.getMonth() === 11 && date.getDate() < 25;
+
+folders.forEach((d,i) => console.log(`${(i+1)===date.getDate() && isDuringAdvent ? '\x1b[32m' : '\x1b[33m'}${i+1 < 10 ? ` ${i+1} ` : `${i+1} `}${(i+1)===date.getDate() && isDuringAdvent ? '' : '\x1b[0m'} - ${d}\x1b[0m`))
+console.log(isDuringAdvent ? `\x1b[33mall\x1b[0m - Run all solutions` : `\x1b[32mall - Run all solutions\x1b[0m`)
 
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
   
-rl.question(`\nWhich day's solution wanna you see ? \x1b[32m[${folders.length}]\x1b[0m `, (day) => {
+rl.question(`\nWhich day's solution wanna you see ? \x1b[32m[${isDuringAdvent ? date.getDate() : 'all'}]\x1b[0m `, (day) => {
   if (day === "") {
-    day = folders.length;
+    day = isDuringAdvent ? date.getDate() : 'all';
   }
 
   if (folders.every(f => f !== `Day ${day}`) && day !== 'all') {
