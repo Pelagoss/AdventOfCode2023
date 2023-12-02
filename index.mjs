@@ -14,7 +14,7 @@ const getDirectories = (source = '.') =>
 let folders = getDirectories();
 
 let date = new Date();
-let isDuringAdvent = date.getMonth() === 11 && date.getDate() < 25;
+let isDuringAdvent = date.getMonth() === 11 && date.getDate() <= 25;
 
 folders.forEach((d,i) => console.log(`${(i+1)===date.getDate() && isDuringAdvent ? '\x1b[32m' : '\x1b[33m'}${i+1 < 10 ? ` ${i+1} ` : `${i+1} `}${(i+1)===date.getDate() && isDuringAdvent ? '' : '\x1b[0m'} - ${d}\x1b[0m`))
 console.log(isDuringAdvent ? `\x1b[33mall\x1b[0m - Run all solutions` : `\x1b[32mall - Run all solutions\x1b[0m`)
