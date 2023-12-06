@@ -56,43 +56,34 @@ function solvePartTwo(data) {
         });
     });
 
-    let newSeeds = [];
-    seeds.forEach((seed) => {
-        let startingSeed = parseInt(seed.split(' ')[0]);
-        let i = startingSeed;
+    stepsKeys.reverse();
 
-        while( i < (startingSeed+parseInt(seed.split(' ')[1]))) {
-            stepsKeys.forEach((sk) => {
-                let copySeed = JSON.parse(JSON.stringify(i));
-                steps[sk].forEach((step) => {
-                    if (i === copySeed && step.source <= i && step.source + (step.length-1) >= i) {
-                        i = Math.abs(i - (step.source-step.destination));
-                    }
-                })
-            });
+    let minProcessedSeed = Number.MAX_VALUE;
 
-            newSeeds.push(i);
-
-            i++;
-        }
-
-    })
-
-    console.log(newSeeds)
-
-    seeds = newSeeds.map((seed) => parseInt(seed)).map((seed) => {
+    let i = 0;
+    while (i < Number.MAX_VALUE) {
+        let seed = JSON.parse(JSON.stringify(i));
         stepsKeys.forEach((sk) => {
             let copySeed = JSON.parse(JSON.stringify(seed));
-            steps[sk].forEach((step) => {
-                if (seed === copySeed && step.source <= seed && step.source + (step.length-1) >= seed) {
-                    seed = Math.abs(seed - (step.source-step.destination));
+            steps[sk].sort((a,b) => Math.abs(a.destination-seed)-Math.abs(b.destination-seed)).every((step) => {
+                if (seed === copySeed && step.destination <= seed && step.destination + (step.length-1) >= seed) {
+                    seed = Math.abs(seed + step.source-step.destination);
+                    return false;
                 }
+
+                return true;
             })
         });
-        return seed;
-    }).reduce((a,b) => Math.min(a, b), Number.MAX_VALUE)
 
-    return seeds;
+        if (seeds.some(s => seed >= parseInt(s.split(' ')[0]) && seed < (parseInt(s.split(' ')[0])+parseInt(s.split(' ')[1])))) {
+            minProcessedSeed = i;
+            break;
+        }
+        
+        i++;
+    }
+
+    return minProcessedSeed;
 }
 
 export const solve = (data) => {
