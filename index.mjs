@@ -37,7 +37,7 @@ rl.question(`\nWhich day's solution wanna you see ? \x1b[32m[${isDuringAdvent ? 
     
     day.forEach( day => {
       import(`./Day ${day}/index.mjs`).then((dayScript) => {
-        let data = readFileSync(`./Day ${day}/data_test`).toString().split('\n');
+        let data = readFileSync(`./Day ${day}/data`).toString().split('\n');
   
         let solutions = dayScript.solve(data);
   
