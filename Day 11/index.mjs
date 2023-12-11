@@ -1,36 +1,9 @@
-function doubleGrid(data) {
-    let indices = data.map((item, index) => ({ item, index })).filter((d) => !d.item.includes('#'));
-
-    indices.forEach((element) => {
-        data.splice(element.index+1, 0, element.item);
-    });
-
-    let realLength = JSON.parse(JSON.stringify(data))[0].length;
-
-    let i = 0;
-    while (i < realLength) {
-        if (data.every((line) => line[i] === '.')) {
-            data = data.map((d) => {
-                let newLine = d.split('');
-                newLine.splice(i, 0, '.')
-                return newLine.join('');
-            });
-
-            realLength++;
-            i++;
-        }
-        i++;
-    }
-
-    return data;
-}
-
 function extendGrid(data, galaxies, n) {
     let indices = data.map((item, index) => ({ item, index })).filter((d) => !d.item.includes('#'));
 
     indices.forEach((element, i) => {
         galaxies = galaxies.map((g) => {
-            if (g.y > element.index) {
+            if (g.y > element.index + ((n-1) * i)) {
                 g.y = g.y + (n - 1);
             }
 
@@ -64,17 +37,14 @@ function extendGrid(data, galaxies, n) {
 }
 
 function solvePartOne(data, n = 2) {
-    data = doubleGrid(data);
-
     let galaxies = data.map((d, i) =>  [...d.matchAll(/#/g)].map(r => {
         return {
             x: r.index,
             y: i
         };
     })).flat();
-    console.log(galaxies);
     
-    // extendGrid(data, galaxies, n);
+    extendGrid(data, galaxies, n);
     
     let sum = 0;
 
@@ -90,9 +60,7 @@ function solvePartOne(data, n = 2) {
 }
 
 function solvePartTwo(data) {
-    return undefined;
-    // return solvePartOne(data, 100);
-    // return solvePartOne(data, 1000000);
+    return solvePartOne(data, 1000000);
 }
 
 export const solve = (data) => {
