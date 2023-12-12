@@ -35,11 +35,11 @@ rl.question(`\nWhich day's solution wanna you see ? \x1b[32m[${isDuringAdvent ? 
   } else {
     day = day === 'all' ? Array.from({length: folders.length}, (_, i) => i + 1) : [day];
     
-    day.forEach( day => {
-      import(`./Day ${day}/index.mjs`).then((dayScript) => {
+    day.forEach((day) => {
+      import(`./Day ${day}/index.mjs`).then(async (dayScript) => {
         let data = readFileSync(`./Day ${day}/data`).toString().split('\n');
   
-        let solutions = dayScript.solve(data);
+        let solutions = await dayScript.solve(data);
   
         console.group("\x1b[1m\x1b[32m%s\x1b[0m", `Solutions of day ${day}`);
         console.table(
